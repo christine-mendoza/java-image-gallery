@@ -1,0 +1,36 @@
+package edu.au.cc.gallery;
+
+import java.util.Scanner;
+import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class UserAdmin {
+
+   public void getCommandList() {
+      System.out.println("1) List Users");
+      System.out.println("2) Add User");
+      System.out.println("3) Edit User");
+      System.out.println("4) Delete User");
+      System.out.println("5) Quit");
+    }
+  public static void interactiveProgram() throws Exception {
+   UserAdmin ad = new UserAdmin();
+    DB db = new DB();
+    db.connect();
+    ad.getCommandList();
+     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+     System.out.print("Enter command: ");
+     String input = br.readLine();
+     if(input == "1") {
+         db.getUsers();
+     }
+   // Scanner scan = new Scanner(System.in);
+   // int input = scan.nextInt();
+   // if(input == 1) {
+     // db.getUsers();
+   // }
+ db.close();
+ }
+}
