@@ -97,14 +97,6 @@ public ArrayList<String> getUsersNoPW() throws SQLException {
   ps.setString(1, username);
   ps.executeUpdate();
 }
- public String delUser(String username) throws SQLException {
-     String sql =  "DELETE FROM users WHERE username = ?";
-      PreparedStatement ps = connection.prepareStatement(sql);
-      ps.setString(1, username);
-      ps.executeUpdate();
-    return null;
-  }
-
 
  public String getPassword(String username) throws SQLException {
   String sql = "SELECT password FROM users WHERE username = ?";
