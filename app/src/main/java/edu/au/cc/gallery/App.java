@@ -4,6 +4,19 @@
 
 package edu.au.cc.gallery;
 
+import static spark.Spark.*;
+import spark.Request;
+import spark.Response;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.sql.SQLException;
+
+import spark.ModelAndView;
+
+import spark.template.handlebars.HandlebarsTemplateEngine;
+
 public class App {
     public String getGreeting() {
         return "Hello Christine!";
@@ -12,6 +25,9 @@ public class App {
     public static void main(String[] args) throws Exception {
        // System.out.println(new App().getGreeting());
 	//DB.demo();
- 	UserAdmin.interactiveProgram();
+	//UserAdmin.interactiveProgram();
+
+       port(5000);
+       new userManager().addRoutes();
     }
 }

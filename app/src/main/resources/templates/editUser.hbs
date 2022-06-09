@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+  <html>
+   <head>
+    <title>EditUser</title>
+    <meta charset = "utf-8"/>
+   </head>
+     <body>
+       <h1>EDIT USER: {{user}} </h1>
+        <form action="/admin/editUser/{{user}}" method="POST">
+         <label for="full_name">Full Name: (* to leave current) </label> <br>
+         <input type ="text" id="full_name" name = "full_name" value= "*"> <br>
+         <label for= "password">Password: (* to leave current) </label> <br>
+        <input type = "text" id="password" name = "password" value = "*"> <br>
+        <br>
+         <input type = "submit" value ="Edit User"/>
+       </form>
+    </body>
+   </html>

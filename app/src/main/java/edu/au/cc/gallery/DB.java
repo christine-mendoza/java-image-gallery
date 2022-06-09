@@ -3,6 +3,7 @@ package edu.au.cc.gallery;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -10,26 +11,45 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class DB {
 
-  private static final String dbUrl = "jdbc:postgresql://demo-database-1.cpni1ycia55k.us-east-1.rds.amazonaws.com/image_gallery";
+ // private static final String dbUrl = "jdbc:postgresql://image-gallery.cpni1ycia55k.us-east-1.rds.amazonaws.com/image_gallery";
   private Connection connection; 
+    
+  private JSONObject getSecret() {
+    String s = secrets.getSecretImageGallery();
+    return new JSONObject(s);
+  }
   
- private String getPassword() {
-  try(BufferedReader br = new BufferedReader(new FileReader("/home/ec2-user/.sql-passwd"))) {
-  String result = br.readLine();
-  return result;
- } catch (IOException ex) {
-	System.err.println("Error opening password file. Make sure .sql-passwd exists and contains your sql password.");
-        System.exit(1);
+ private String getPassword(JSONObject secret) {
+   return secret.getString("password");
  }
-  return null;
-} 
+
+private String getUser(JSONObject secret) {
+  return secret.getString("username");
+}
+
+private String getHost(JSONObject secret) {
+  return secret.getString("host");
+}
+
+private String getDBID(JSONObject secret) {
+  return secret.getString("dbInstanceIdentifier");
+}
+
+private String getDBURL(JSONObject secret) {
+ return "jdbc:postgresql:/" + "/" + getHost(secret) + "/" + getUser(secret); 
+}
+
 
  public void connect() throws SQLException {
    try {
      Class.forName("org.postgresql.Driver");
-     connection = DriverManager.getConnection(dbUrl, "image_gallery", getPassword());
+     JSONObject secret = getSecret();
+     connection = DriverManager.getConnection(getDBURL(secret), getUser(secret), getPassword(secret));
    } catch (ClassNotFoundException ex) {
       ex.printStackTrace();
       System.exit(1);
@@ -51,7 +71,17 @@ public class DB {
     System.out.printf("%-20s %-20s %-20s %n", un, pw, fn);
 	}
  }
- 
+
+public ArrayList<String> getUsersNoPW() throws SQLException {
+  PreparedStatement stmt = connection.prepareStatement("select username from users");
+   ResultSet rs = stmt.executeQuery();
+   ArrayList<String> list = new ArrayList<String>();
+   while(rs.next()) {
+   list.add(rs.getString("username"));
+}
+  return list;
+} 
+
  public void addUser(String username, String password, String full_name) throws SQLException {
   String sql = "INSERT INTO users(username, password, full_name) VALUES(?,?,?);";
   PreparedStatement ps = connection.prepareStatement(sql);
@@ -67,6 +97,14 @@ public class DB {
   ps.setString(1, username);
   ps.executeUpdate();
 }
+ public String delUser(String username) throws SQLException {
+     String sql =  "DELETE FROM users WHERE username = ?";
+      PreparedStatement ps = connection.prepareStatement(sql);
+      ps.setString(1, username);
+      ps.executeUpdate();
+    return null;
+  }
+
 
  public String getPassword(String username) throws SQLException {
   String sql = "SELECT password FROM users WHERE username = ?";
