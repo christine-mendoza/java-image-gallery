@@ -2,4 +2,4 @@
 
 export JETTY_PORT=5555
 export GRADLE_OPTS="-Xmx64m -Dorg.gradle.jvmargs='-Xmx256m -XX:MaxPermSize=64m'"
-gradle run
+/home/ec2-user/.sdkman/candidates/gradle/current/bin/gradle run
