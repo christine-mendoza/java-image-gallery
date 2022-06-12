@@ -9,7 +9,7 @@ su ec2-user -l -c 'curl -s "https://get.sdkman.io" | bash && source .bashrc && s
 
 # Configure/install custom software
 cd /home/ec2-user
-git clone https://github.com/cdavidshaffer/java-image-gallery.git
+git clone https://github.com/christine-mendoza/java-image-gallery.git
 chown -R ec2-user:ec2-user java-image-gallery
 
 # Start/enable services
