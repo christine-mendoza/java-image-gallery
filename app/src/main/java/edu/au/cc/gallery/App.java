@@ -26,8 +26,12 @@ public class App {
        // System.out.println(new App().getGreeting());
 	//DB.demo();
 	//UserAdmin.interactiveProgram();
-
-       port(5000);
+    String portString = System.getenv("JETTY_PORT");
+	if (portString == null || portString.equals(""))
+	    port(5000);
+	else
+	    port(Integer.parseInt(portString));
        new userManager().addRoutes();
+//     S3.demo();
     }
 }
