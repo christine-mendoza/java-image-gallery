@@ -21,7 +21,7 @@ dependencies {
   implementation platform('software.amazon.awssdk:bom:2.13.20')
   implementation 'software.amazon.awssdk:s3'
   implementation 'software.amazon.awssdk:secretsmanager'
-  
+  implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.243'
   // https://mvnrepository.com/artifact/org.json/json
 implementation group: 'org.json', name: 'json', version: '20220320'
    // https://mvnrepository.com/artifact/org.postgresql/postgresql
@@ -46,7 +46,7 @@ testing {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.au.cc.gallery.App'
+    mainClass = 'edu.au.cc.gallery.ui.App'
 }
 run {
   standardInput = System.in

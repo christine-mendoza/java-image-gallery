@@ -1,10 +1,11 @@
-package edu.au.cc.gallery;
+package edu.au.cc.gallery.data;
+import edu.au.cc.gallery.aws.secrets;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -72,6 +73,28 @@ private String getDBURL(JSONObject secret) {
 	}
  }
 
+ public ResultSet executeQuery(String query) throws SQLException {
+  PreparedStatement stmt = connection.prepareStatement(query);
+  ResultSet rs = stmt.executeQuery();
+  return rs;
+ }
+
+ public ResultSet executeQuery(String query, String[] values) throws SQLException {
+  PreparedStatement stmt = connection.prepareStatement(query);
+  for(int i = 0; i < values.length; i++){  
+   stmt.setString(i+1, values[i]);
+ }
+ ResultSet rs = stmt.executeQuery(); 
+  return rs;
+ 
+}
+ public void execute(String query, String[] values) throws SQLException {
+  PreparedStatement stmt = connection.prepareStatement(query);
+  for(int i = 0; i < values.length; i++) {
+   stmt.setString(i+1, values[i]);
+   stmt.execute();
+ }
+}
 public ArrayList<String> getUsersNoPW() throws SQLException {
   PreparedStatement stmt = connection.prepareStatement("select username from users");
    ResultSet rs = stmt.executeQuery();
@@ -139,7 +162,33 @@ public boolean userExists(String username) throws SQLException {
   }
   return false;
 }
+public ArrayList<String> getImageList(String user) throws SQLException {
+ String sql = "select image from images where username = ?";
+ PreparedStatement ps = connection.prepareStatement(sql);
+ ps.setString(1, user);
+ ResultSet rs = ps.executeQuery();
+ ArrayList<String> result = new ArrayList<String>();
+ while(rs.next()) {
+  result.add(rs.getString("image"));
+ }
+ return result;
+}
 
+public void addImage(String username, String image) throws SQLException {
+ String sql = "insert into images(username, image) values(?,?)";
+ PreparedStatement ps = connection.prepareStatement(sql);
+ ps.setString(1, username);
+ ps.setString(2, image);
+ ps.executeUpdate();
+}
+
+public void deleteImage(String img, String user) throws SQLException {
+ String sql = "delete from images where image = ? and username = ?";
+ PreparedStatement ps = connection.prepareStatement(sql);
+ ps.setString(1, img);
+ ps.setString(2, user);
+ ps.executeUpdate();
+}
  public void close() throws SQLException {
    connection.close();
  }

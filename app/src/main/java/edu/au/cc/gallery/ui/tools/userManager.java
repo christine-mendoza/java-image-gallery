@@ -1,4 +1,9 @@
-package edu.au.cc.gallery;
+package edu.au.cc.gallery.ui;
+
+import edu.au.cc.gallery.data.Postgres;
+import edu.au.cc.gallery.data.User;
+import edu.au.cc.gallery.data.UserDAO;
+import edu.au.cc.gallery.data.DB;
 
 import static spark.Spark.*;
 import spark.Request;
@@ -15,18 +20,27 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class userManager {
   
+private static UserDAO getUserDAO() throws Exception {
+  return Postgres.getUserDAO();
+ }
+
+/**
   public ArrayList<String> users() throws SQLException {
    DB db = new DB();
    db.connect();
    return db.getUsersNoPW();
   }
+**/
 
-
- public String admin(Request req, Response resp) throws SQLException  {
+ private String admin(Request req, Response resp) throws SQLException  {
+  try {
    Map<String,Object> model = new HashMap<String, Object>();
-   model.put("user", users());
+   model.put("users",getUserDAO().getUsers());
    return new HandlebarsTemplateEngine()
     .render(new ModelAndView(model, "admin.hbs"));
+  } catch (Exception ex) {
+      return "Error: "+ ex.getMessage();
+   }
 }
 
 public String createUser(Request req, Response resp) {
@@ -85,7 +99,7 @@ return req.params("user") + " updated";
 }
 
 public void addRoutes() {
-  get("/admin", (req,res) -> admin(req,res));
+  get("/admin/users", (req,res) -> admin(req,res));
   get("/admin/deleteUser",(req,res) -> deleteUser(req, res));
   post("/admin/deleteUser/:user", (req,res) -> delButton(req,res));
   post("/admin/addUser/added",(req,res) -> addUserButton(req,res));

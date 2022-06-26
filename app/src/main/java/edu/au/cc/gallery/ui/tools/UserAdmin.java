@@ -1,4 +1,9 @@
-package edu.au.cc.gallery;
+package edu.au.cc.gallery.ui;
+
+import edu.au.cc.gallery.data.Postgres;
+import edu.au.cc.gallery.data.User;
+import edu.au.cc.gallery.data.UserDAO;
+import edu.au.cc.gallery.data.DB;
 
 import java.util.Scanner;
 import java.sql.SQLException;
