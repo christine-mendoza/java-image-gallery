@@ -79,7 +79,7 @@ public class S3 {
   bucketName = "edu.au.cc.image-gallery-con";     
   S3Object object = awsClient.getObject(bucketName, key);
   S3ObjectInputStream objectData = object.getObjectContent();
-  String filePath = "/home/ec2-user/userImages" + key;
+  String filePath = "/home/ec2-user/userImages/" + key;
   FileOutputStream fos = new FileOutputStream(new File(filePath));
   IOUtils.copy(objectData, fos);
   fos.close();

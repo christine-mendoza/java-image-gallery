@@ -162,6 +162,18 @@ public boolean userExists(String username) throws SQLException {
   }
   return false;
 }
+public boolean imgExists(String image, String username) throws SQLException {
+ String sql = "SELECT image FROM username WHERE image = ? and username =?";
+ PreparedStatement ps = connection.prepareStatement(sql);
+ ps.setString(1, image);
+ ps.setString(2, username);
+ ResultSet rs = ps.executeQuery();
+ if(rs.next()) {
+   return true;
+ }
+ return false;
+}
+
 public ArrayList<String> getImageList(String user) throws SQLException {
  String sql = "select image from images where username = ?";
  PreparedStatement ps = connection.prepareStatement(sql);

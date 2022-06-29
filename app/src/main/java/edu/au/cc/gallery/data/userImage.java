@@ -15,7 +15,7 @@ public class userImage {
 
  public void putObjectByUser(String user, String keyName, File image) throws Exception {
   connection.connect();
-  connection.putObject(bucketName, keyName, image);
+  connection.putObject(bucketName, keyName, image); 
   imgObj.addImage(user, keyName);
  }
 

@@ -1,5 +1,11 @@
 package edu.au.cc.gallery.ui;
 
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.File;
+
 import edu.au.cc.gallery.data.Postgres;
 import edu.au.cc.gallery.data.User;
 import edu.au.cc.gallery.data.UserDAO;
@@ -36,9 +42,11 @@ import spark.utils.IOUtils;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import java.awt.Image;
 
 public class userMain {
  private  userImage userImg = new userImage();
+ private String imgFile;
 
 private static UserDAO getUserDAO() throws Exception {
   return Postgres.getUserDAO();
@@ -81,39 +89,86 @@ public String uploadImages(Request req, Response resp) {
   }
 
  public String viewImages(Request req, Response resp) throws Exception {
+
+	 
      Map<String,Object> model = new HashMap<String, Object>();
      DB db = new DB();
      db.connect();
      ArrayList<String> imageList = db.getImageList(req.session().attribute("user"));
-     model.put("images", imageList);
-     return new HandlebarsTemplateEngine()
-     .render(new ModelAndView(model, "viewImg.hbs"));
+    /** ArrayList<String> thumbList = new ArrayList<String>();
+     for(String image : imageList) {
+     S3 s3 = new S3();
+     s3.connect();
+     String fileName = image; 
+     String fileType = "";
+     if(fileName.contains(".jpg")) {
+	fileType = "jpg";
+     }
+     if(fileName.contains(".png")) {
+	fileType = "png";
+      }
+     String imgType;
+     s3.getObject("trash", fileName);
+     String localFile = "/home/ec2-user/userImages/" + fileName;	     
+      File inputImgFile = new File(localFile);
+      int thumbnail_width = 400;
+      int thumbnail_height = 400;
+      File outputFile=null;
+      try {
+       BufferedImage img = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_INT_RGB);
+       img.createGraphics().drawImage(ImageIO.read(inputImgFile).getScaledInstance(thumbnail_width, thumbnail_height, Image.SCALE_SMOOTH),0,0,null);
+       outputFile=new File(inputImgFile.getParentFile()+File.separator+"thumbnail_"+inputImgFile.getName());
+        ImageIO.write(img, fileType, outputFile);
+	 byte[] bytes = Files.readAllBytes(Paths.get(localFile));
+	   String encodedString = Base64.getEncoder().encodeToString(bytes);
+	   thumbList.add(encodedString);
+      } catch (IOException e) {
+	      System.out.println("Exception while generating thumbnail "+e.getMessage());
+      }
+
+     }**/
+         model.put("images", imageList);
+	      return new HandlebarsTemplateEngine()
+	     .render(new ModelAndView(model, "viewImg.hbs"));
  }
 
- public byte[] openImg(Request req, Response resp) throws Exception {
+ public String openImg(Request req, Response resp) throws Exception {
      Map<String,Object> model = new HashMap<String, Object>();
   
    S3 s3 = new S3();
    s3.connect();
    String fileName = req.queryParams("imagename");
-   System.out.println(fileName);
-   //String fileName = "lama.jpg";
+   String fileType = "";
+   if(fileName.contains(".jpg")) {
+    fileType = "jpg";
+   }
+   if(fileName.contains(".png")) {
+    fileType = "png";
+   }
+   System.out.println(fileType);
+   imgFile = req.queryParams("imagename");
+   String imgType;
    s3.getObject("trash", fileName);
 
    
-   String localFile = "/home/ec2-user/userImages" + fileName;
+   String localFile = "/home/ec2-user/userImages/" + fileName;
    File file = new File(localFile);
    InputStream input = new FileInputStream(file);
    BufferedImage bi = ImageIO.read(input);
    byte[] rawImage = null;
    try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-    ImageIO.write( bi, "jpg", baos );
+    ImageIO.write( bi, fileType, baos );
     baos.flush();
     rawImage = baos.toByteArray();
-    resp.type("image/jpeg");
+   // resp.type("image/jpeg");
    } 
+   byte[] bytes = Files.readAllBytes(Paths.get(localFile));
+  String encodedString = Base64.getEncoder().encodeToString(bytes);
+     model.put("B64image", encodedString);
+     return new HandlebarsTemplateEngine()
+     .render(new ModelAndView(model, "openImg.hbs"));
 
-    return rawImage;
+   // return rawImage;
  }
 
 private boolean isUser(String username, String user) {
@@ -195,6 +250,12 @@ public String imageTest(Request res, Response resp) throws Exception {
        .render(new ModelAndView(model, "imgTest.hbs"));
   }
 
+ public String deleteImage(Request req, Response resp) throws Exception {
+  userImg.deleteObjectByUser(req.session().attribute("user"), imgFile);
+  resp.redirect("/main/viewImg");
+  return "";
+}
+
  public void addRoutes() {
 // staticFileLocation("/resources");
   get("/login",(req, res) -> login(req, res));
@@ -208,5 +269,6 @@ public String imageTest(Request res, Response resp) throws Exception {
   post("/main/uploadImg", (req,res) ->  addImg(req,res));
   get("/main/imgTest",(req,res) -> openImg(req,res));
   get("/main/openImg/:imagename",(req,res) -> openImg(req,res));
+  get("/main/delete",(req,res) -> deleteImage(req,res));
  }
 }

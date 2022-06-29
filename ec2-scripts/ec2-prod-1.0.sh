@@ -2,6 +2,9 @@
 
 # Install packages
 yum -y update
+amazon-linux-extras enable postgresql13
+yum clean metadatals
+sudo yum install -y postgresql
 amazon-linux-extras install -y java-openjdk11
 amazon-linux-extras install -y nginx1
 yum install -y java-11-openjdk-devel git

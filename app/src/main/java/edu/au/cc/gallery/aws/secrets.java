@@ -17,13 +17,13 @@ public class secrets {
   public static String getSecretImageGallery() {
 
  //  String secretName = "arn:aws:secretsmanager:us-east-1:196007689115:secret:sec-ig-image_gallery-qY2GpZ";
-    String secretName = "sec-ig-image_gallery";
+    String secretName = "sec-mod5-ig-postgres";
     Region region = Region.US_EAST_1;
 
     // Create a Secrets Manager client
     SecretsManagerClient client  = SecretsManagerClient.builder()
                                     .region(region)
-				   // .credentialsProvider(ProfileCredentialsProvider.create())
+				   //:.credentialsProvider(ProfileCredentialsProvider.create())
                                     .build();
     
     // In this sample we only handle the specific exceptions for the 'GetSecretValue' API.

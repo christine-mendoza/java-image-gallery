@@ -23,7 +23,11 @@
        <body>
         <a href="/main">Go Home</a> | <a href = "/main/viewImg">Images</a> | <a href= "/login"> Logout </a> <br>
         <h1> Image </h1>
-         
+       <form action = "/main/delete?={{imagename}}" methond = "POST">
+        <img src ="data:image/jpg;base64,{{B64image}}">
+        </br>
+        <input type = "submit" value = "Delete Image"/>
+     </form>
       </body>
      </html>
            
