@@ -9,6 +9,8 @@
         background-color: white;
         border-left: 400px solid #589883;
         border-right: 400px solid #589883;
+        border-top: 125px solid #589883;
+        border-bottom: 125px solid #589883;
      }
       body {
        font-family: "Lucida Console", "Courier New", monospace;
@@ -19,19 +21,15 @@
       font-size: 60px;
      }
     </style>  
-   h1 {
-      font-size: 60px;
-     }
-    </style>
 	   </head>
 	     <body>
        <h1>USER MANAGEMENT</h1>
 	<form action= "/admin/addUser" method = "POST">
-	<ol>
+	
           {{# users}}
-	  <li> <a href = "/admin/editUser?user={{username}}">{{username}}</a>&nbsp <a href = "/admin/deleteUser?user={{username}}">delete </a>&nbsp {{fullName}}</li>
+	   <a href = "/admin/editUser?user={{username}}">{{username}}</a>&nbsp <a href = "/admin/deleteUser?user={{username}}">delete </a>&nbsp {{fullName}} <br>
           {{/ users}}
-	</ol>
+	
         <input type="submit" value="Add User" />
     </body>
   </html>
