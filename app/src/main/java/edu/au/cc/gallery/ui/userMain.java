@@ -121,7 +121,7 @@ public String viewImages(Request req, Response resp) throws Exception {
        img.createGraphics().drawImage(ImageIO.read(inputImgFile).getScaledInstance(thumbnail_width, thumbnail_height, Image.SCALE_SMOOTH),0,0,null);
        outputFile=new File(inputImgFile.getParentFile()+File.separator+"thumbnail_"+inputImgFile.getName());
         ImageIO.write(img, fileType, outputFile);
-	 byte[] bytes = Files.readAllBytes(Paths.get(localFile));
+	 byte[] bytes = Files.readAllBytes(Paths.get("/home/ec2-user/userImages/"+"thumbnail_"+inputImgFile.getName()));
 	   String encodedString = Base64.getEncoder().encodeToString(bytes);
            thumbList.add(encodedString);
 	   ig.add(new imageObject(fileName, encodedString));
