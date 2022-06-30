@@ -85,18 +85,20 @@ public String uploadImages(Request req, Response resp) {
      Map<String,Object> model = new HashMap<String, Object>();
     // model.put("username", req.queryParams("username"));
     return new HandlebarsTemplateEngine()
-      .render(new ModelAndView(model, "uploadImg.hbs"));
+    .render(new ModelAndView(model, "uploadImg.hbs"));
   }
 
- public String viewImages(Request req, Response resp) throws Exception {
-
-	 
-     Map<String,Object> model = new HashMap<String, Object>();
+public String viewImages(Request req, Response resp) throws Exception {
+     
+    Map<String,Object> model = new HashMap<String, Object>();
      DB db = new DB();
      db.connect();
      ArrayList<String> imageList = db.getImageList(req.session().attribute("user"));
-    /** ArrayList<String> thumbList = new ArrayList<String>();
+    ArrayList<imageObject> ig = new ArrayList<imageObject>();
+     model.put("files", imageList);
+     ArrayList<String> thumbList = new ArrayList<String>();
      for(String image : imageList) {
+      model.put("fileName", image);
      S3 s3 = new S3();
      s3.connect();
      String fileName = image; 
@@ -111,8 +113,8 @@ public String uploadImages(Request req, Response resp) {
      s3.getObject("trash", fileName);
      String localFile = "/home/ec2-user/userImages/" + fileName;	     
       File inputImgFile = new File(localFile);
-      int thumbnail_width = 400;
-      int thumbnail_height = 400;
+      int thumbnail_width = 150;
+      int thumbnail_height = 150;
       File outputFile=null;
       try {
        BufferedImage img = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_INT_RGB);
@@ -121,16 +123,18 @@ public String uploadImages(Request req, Response resp) {
         ImageIO.write(img, fileType, outputFile);
 	 byte[] bytes = Files.readAllBytes(Paths.get(localFile));
 	   String encodedString = Base64.getEncoder().encodeToString(bytes);
-	   thumbList.add(encodedString);
+           thumbList.add(encodedString);
+	   ig.add(new imageObject(fileName, encodedString));
       } catch (IOException e) {
 	      System.out.println("Exception while generating thumbnail "+e.getMessage());
       }
-
-     }**/
-         model.put("images", imageList);
+    
+     } 
+             
+              model.put("images", ig);
 	      return new HandlebarsTemplateEngine()
 	     .render(new ModelAndView(model, "viewImg.hbs"));
- }
+ } 
 
  public String openImg(Request req, Response resp) throws Exception {
      Map<String,Object> model = new HashMap<String, Object>();

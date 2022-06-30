@@ -21,12 +21,13 @@
     </style>
      </head>
        <body>
-        <a href="/main">Go Home</a> | <a href= "/login"> Logout </a> <br>
+        <a href="/main">Go Home</a> | <a href= "/login"> Logout </a>
         <h1> Images </h1>
-     
-       {{#images}}
-        <a href = "/main/imgTest?imagename={{ this }}">  {{ this }} </a> <br>
-      {{/images}}
-   
+
+   {{#images}}
+   <a href ="/main/imgTest?imagename={{ fileName }}">
+   <img src ="data:image/jpg;base64,{{ image }}" height = "150", width = "150" /> </a>
+        &nbsp
+{{/images}}
       </body>
      </html>

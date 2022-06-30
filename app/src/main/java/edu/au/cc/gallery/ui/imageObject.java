@@ -7,5 +7,15 @@ public class imageObject {
 		this.fileName = fileName;
 	        this.image = image;	
          }
+ public String getFileName() {
+	return fileName;
+ }
 
+ public String getImage() {
+  return image;
+ }
+
+public String toString() {
+ return fileName + "/n" + image;
+}
 }
