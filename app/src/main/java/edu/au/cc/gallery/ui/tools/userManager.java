@@ -24,14 +24,6 @@ private static UserDAO getUserDAO() throws Exception {
   return Postgres.getUserDAO();
  }
 
-/**
-  public ArrayList<String> users() throws SQLException {
-   DB db = new DB();
-   db.connect();
-   return db.getUsersNoPW();
-  }
-**/
-
  private String admin(Request req, Response resp) throws SQLException  {
   try {
    Map<String,Object> model = new HashMap<String, Object>();
@@ -53,6 +45,9 @@ public String addUserButton(Request req, Response resp) throws Exception {
   DB db = new DB();
   db.connect();
   db.addUser(req.queryParams("username"), req.queryParams("password"), req.queryParams("full_name"));
+ // User u = new User(req.queryParams("username"), req.queryParams("password"), req.queryParams("full_name"));
+ // getUserDAO().addUser(u);
+ // userUtil.addUser(req.queryParams("username"), req.queryParams("password"), req.queryParams("full_name"));
   return  req.queryParams("username") + " has been added";
 }
 

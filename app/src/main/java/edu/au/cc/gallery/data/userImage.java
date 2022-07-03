@@ -23,10 +23,6 @@ public class userImage {
   return imgObj.getImageList(user);
  }
 
-// public List<String> getUserFileList(String user) throws Exception {
-// return imgObj.getImageList(user);
- //}
-
  public String getCurrentObject(String key) throws Exception {
   connection.connect();
   return connection.getObject(bucketName, key);
@@ -37,4 +33,10 @@ public class userImage {
  connection.deleteObject(bucketName, keyName);
  imgObj.deleteImage(keyName, user);
  }
+
+ public void getObject(String fileName) throws Exception {
+  connection.connect();
+  connection.getObject(bucketName, fileName);
+ }
+       
 }

@@ -36,6 +36,16 @@ public class S3 {
     private static final Region region = Region.US_EAST_1;
     private S3Client client;
     private AmazonS3 awsClient;
+
+    private static String s3_image_bucket;
+
+    public static void setS3_ImageBucket(String bucket) {
+     s3_image_bucket = bucket;
+    }
+
+    public static String getS3_ImageBucket() {
+     return s3_image_bucket;
+    }
     public void connect() {
         client = S3Client.builder().region(region).build();
 	awsClient = AmazonS3ClientBuilder.standard().withRegion("us-east-1").build();
