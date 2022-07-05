@@ -9,7 +9,7 @@ import edu.au.cc.gallery.aws.S3;
 
 public class userImage {
  private S3 connection = new S3();
- private final String bucketName = "edu.au.cc.image-gallery-con";
+ private final String bucketName = S3.getS3_ImageBucket();
  private Image imgObj = new Image();
 
 

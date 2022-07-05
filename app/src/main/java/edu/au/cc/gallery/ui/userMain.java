@@ -104,7 +104,14 @@ try {
     return "";
 }
 private boolean isAdmin(String username) {
-  return username != null &&  username.equals("Administrator");
+  if(username != null &&  username.equals("Administrator")) {
+   return true;
+  }
+  if(username != null &&  username.equals("augrader")) {
+	  return true;
+  }
+  return false;
+	
 }
 
 private String checkAdmin(Request req, Response resp) {
@@ -127,15 +134,15 @@ try {
  public String addImg(Request req, Response resp) throws Exception {
  
    try {
-   req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/home/ec2-user/temp/"));
+   req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp/"));
    Part filePart = req.raw().getPart("uploaded_file");
    InputStream inputStream = filePart.getInputStream(); 
    String keyName = filePart.getSubmittedFileName();
-   OutputStream outputStream = new FileOutputStream("/home/ec2-user/temp/tmp");
+   OutputStream outputStream = new FileOutputStream("/temp/tmp");
    IOUtils.copy(inputStream, outputStream);
    outputStream.close();
 
-   File fileHandle = new File("/home/ec2-user/temp/tmp");
+   File fileHandle = new File("/temp/tmp");
    userImg.putObjectByUser(req.session().attribute("user"), keyName, fileHandle);
    fileHandle.delete();
    } catch (Exception ex) {

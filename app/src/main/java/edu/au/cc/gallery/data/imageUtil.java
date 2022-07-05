@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 
 public final class imageUtil {
-
+ public String localFilePath = "/temp/ig/";
  public static String getFileType(String fileName) {
   String fileType = "";
   if(fileName.contains(".jpg")) {
@@ -39,7 +39,7 @@ public final class imageUtil {
   userImage ui = new userImage();
   ui.getObject(fileName);
   String fileType = getFileType(fileName);
-  String localFile = "/home/ec2-user/userImages/" + fileName;
+  String localFile = "/temp/ig/" + fileName;
   File inputImgFile = new File(localFile);
   int thumbnail_width = 150;
   int thumbnail_height = 150;
@@ -49,7 +49,7 @@ public final class imageUtil {
        img.createGraphics().drawImage(ImageIO.read(inputImgFile).getScaledInstance(thumbnail_width, thumbnail_height, Image.SCALE_SMOOTH),0,0,null);
        outputFile=new File(inputImgFile.getParentFile()+File.separator+"thumbnail_"+inputImgFile.getName());
        ImageIO.write(img, fileType, outputFile);
-       byte[] bytes = Files.readAllBytes(Paths.get("/home/ec2-user/userImages/"+"thumbnail_"+inputImgFile.getName()));
+       byte[] bytes = Files.readAllBytes(Paths.get("/temp/ig/" +"thumbnail_"+inputImgFile.getName()));
        String encodedString = Base64.getEncoder().encodeToString(bytes);
        return encodedString;
       } catch (IOException e) {
@@ -62,7 +62,7 @@ public final class imageUtil {
    userImage ui = new userImage();
    ui.getObject(fileName);
    String fileType = getFileType(fileName);
-   String localFile = "/home/ec2-user/userImages/" + fileName;
+   String localFile = "/temp/ig/" + fileName;
    File file = new File(localFile);
    InputStream input = new FileInputStream(file);
    BufferedImage bi = ImageIO.read(input);
