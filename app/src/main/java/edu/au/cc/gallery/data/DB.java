@@ -19,7 +19,58 @@ public class DB {
 
  // private static final String dbUrl = "jdbc:postgresql://image-gallery.cpni1ycia55k.us-east-1.rds.amazonaws.com/image_gallery";
   private Connection connection; 
-    
+ 
+  private static String ig_password;
+  private static String ig_user;
+  private static String pg_host;
+  private static String ig_database;
+  private static String pg_port;
+
+  public static void setIg_passwd(String password) {
+   ig_password = password;
+  }
+
+  public static String getIg_password() {
+   return ig_password;
+  }
+
+  public static void setIg_user(String user) {
+   ig_user = user;
+  }
+
+  public static String getIg_user() {
+   return ig_user;
+  }
+
+  public static void setPg_host(String host) {
+    pg_host = host;
+  }
+
+  public static String getPg_host() {
+   return pg_host;
+  }
+
+  public static void setIg_db(String db) {
+   ig_database = db;
+  }
+
+  public static String getIg_db() {
+   return ig_database;
+  }
+
+  public static void setPg_port(String port) {
+   pg_port = port;
+  }
+
+  public static String getPg_port() {
+    return pg_port;
+  }
+
+  public static String getHostName() { 
+    return "jdbc:postgresql://" + getPg_host() + ":" + getPg_port() + "/" + getIg_db();
+  }
+  
+  /**  
   private JSONObject getSecret() {
     String s = secrets.getSecretImageGallery();
     return new JSONObject(s);
@@ -44,13 +95,15 @@ private String getDBID(JSONObject secret) {
 private String getDBURL(JSONObject secret) {
  return "jdbc:postgresql:/" + "/" + getHost(secret) + "/" + getUser(secret); 
 }
+**/
 
 
  public void connect() throws SQLException {
    try {
      Class.forName("org.postgresql.Driver");
-     JSONObject secret = getSecret();
-     connection = DriverManager.getConnection(getDBURL(secret), getUser(secret), getPassword(secret));
+   //  JSONObject secret = getSecret();
+   //  connection = DriverManager.getConnection(getDBURL(secret), getUser(secret), getPassword(secret));
+   connection = DriverManager.getConnection(getHostName(), getIg_user(), getIg_password());
    } catch (ClassNotFoundException ex) {
       ex.printStackTrace();
       System.exit(1);

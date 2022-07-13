@@ -36,6 +36,16 @@ public class S3 {
     private static final Region region = Region.US_EAST_1;
     private S3Client client;
     private AmazonS3 awsClient;
+    private String getObjectFilePath = "/temp/ig/";
+    private static String s3_image_bucket;
+
+    public static void setS3_ImageBucket(String bucket) {
+     s3_image_bucket = bucket;
+    }
+
+    public static String getS3_ImageBucket() {
+     return s3_image_bucket;
+    }
     public void connect() {
         client = S3Client.builder().region(region).build();
 	awsClient = AmazonS3ClientBuilder.standard().withRegion("us-east-1").build();
@@ -72,14 +82,14 @@ public class S3 {
 }
      public String getObject(String bucketName, String key) throws Exception {
        GetObjectRequest gor = GetObjectRequest.builder()
-                 .bucket("edu.au.cc.image-gallery-con")
+                 .bucket(getS3_ImageBucket())
                  .key(key)
                  .build();
                // client.getObject(gor);
-  bucketName = "edu.au.cc.image-gallery-con";     
+  bucketName = getS3_ImageBucket();     
   S3Object object = awsClient.getObject(bucketName, key);
   S3ObjectInputStream objectData = object.getObjectContent();
-  String filePath = "/home/ec2-user/userImages/" + key;
+  String filePath = getObjectFilePath + key;
   FileOutputStream fos = new FileOutputStream(new File(filePath));
   IOUtils.copy(objectData, fos);
   fos.close();

@@ -1,4 +1,4 @@
-package edu.au.cc.gallery.ui;
+package edu.au.cc.gallery.data;
 
 public class imageObject {
  String fileName;

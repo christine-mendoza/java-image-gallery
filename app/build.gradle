@@ -8,6 +8,10 @@
  */
 
 plugins {
+  //shadow jar plugin
+   id 'com.github.johnrengelman.shadow' version '7.1.2'
+  //apply the java plugin to add support for java
+   id 'java'
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
 }
@@ -47,6 +51,15 @@ testing {
 application {
     // Define the main class for the application.
     mainClass = 'edu.au.cc.gallery.ui.App'
+}
+
+jar {
+ manifest {
+  attributes (
+   'Class-Path': configurations.compileClasspath.collect { it.getName() }.join(' '),
+   'Main-Class': 'edu.au.cc.gallery.ui.App'
+   )
+ }
 }
 run {
   standardInput = System.in

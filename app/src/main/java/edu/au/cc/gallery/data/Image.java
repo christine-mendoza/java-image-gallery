@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Image {
+public class Image implements imageDAO {
  private DB connection = new DB();
 
- public List<String> getImages(String u) throws SQLException {
-  connection.connect();
-  return connection.getImageList(u); 
-}
 public ArrayList<String> getImageList(String u) throws SQLException {
  connection.connect();
  return connection.getImageList(u);
